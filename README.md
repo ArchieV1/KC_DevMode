@@ -3,7 +3,8 @@ Adds common DevMode functionality to Kingdoms and Castles.
 Useful for testing things or just editing your world
 
 # Features
-- Log WIP
+- Log
+- Remove update popup
 
 
 # Planned features

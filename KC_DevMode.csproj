@@ -551,6 +551,7 @@
     </ItemGroup>
     <ItemGroup>
       <Compile Include="DevMode.cs" />
+      <Compile Include="DevMode_Logger.cs" />
       <Compile Include="RimworldLogging.cs" />
     </ItemGroup>
     <ItemGroup>
