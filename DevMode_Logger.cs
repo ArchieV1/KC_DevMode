@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Harmony;
 using UnityEngine;
-using Random = System.Random;
 
 namespace KC_DevMode
 {
     public class DevMode_Logger : MonoBehaviour
     {
-        public static KCModHelper Helper;
         public static DevMode_Logger Inst;
         /// <summary>
         /// [modName, message]
@@ -57,23 +54,18 @@ namespace KC_DevMode
 
 
         // ~\steamapps\common\Kingdoms and Castles\KingdomsAndCastles_Data\mods\log.txt
-        // Created by ModCompiler.Log()
-        // Or maybe KCModHelper.LogModEvent()
-        // Will finish running before this runs. Can find history?
-        
-        // Console.Out.WriteLine() definitely writes here
-        public List<string> LaunchLogs = new List<string>(); 
+        // TODO catch these? would have to work backwards if possible
+        // Created by Console.Out.WriteLine() 
         
         // C:\Users\[UserName]\AppData\LocalLow\LionShield\Kingdoms and Castles\Player.log
         // ~/Library/Logs/Unity/Player.log
         // ~/.config/unity3d/CompanyName/ProductName/Player.log
         // Created by: Debug.Log()
-        public List<string> RuntimeLogs = new List<string>();
-        
+
         // ~\steamapps\common\Kingdoms and Castles\KingdomsAndCastles_Data\mods\MOD_NAME\output.txt
         // ~\steamapps\workshop\content\569480\MOD_ID\output.txt
+        // TODO find workshop mod name?
         // Created by: KCModHelper.Log()
-        public Dictionary<string, List<string>> ModLogs = new Dictionary<string, List<string>>();
 
         /// <summary>
         /// Updates consoleHeight/consoleWidth/consoleYpos/consoleXpos in case of screen size changing
@@ -138,10 +130,6 @@ namespace KC_DevMode
             Generate_LogModNameBackgroundTex();
         }
         
-        public void Start()
-        {
-        }
-
         /// <summary>
         /// Runs before scene loads
         /// Sets up modHelper and patches Harmony
@@ -150,27 +138,10 @@ namespace KC_DevMode
         // ReSharper disable once ParameterHidesMember
         public void Preload(KCModHelper helper)
         {
-            Helper = helper;
             var harmony = HarmonyInstance.Create("DevMode_Logger");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
-    
-        /// <summary>
-        /// Runs after the scene has loaded
-        /// </summary>
-        /// <param name="helper">The helper injected by KaC upon compilation</param>
-        // ReSharper disable once ParameterHidesMember
-        public void SceneLoaded(KCModHelper helper)
-        {
-        }
-
-        /// <summary>
-        /// Runs every frame
-        /// </summary>
-        public void Update()
-        {
-        }
-
+        
         private void OnGUI()
         {
             if (ScreenHeight != Screen.height || ScreenWidth != ScreenWidth)
