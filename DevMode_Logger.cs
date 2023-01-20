@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Harmony;
@@ -46,6 +47,8 @@ namespace KC_DevMode
         private float ScreenHeight = Screen.height;
 
         float textHeight = 18f;
+        private int maxMessageLength = 125;
+        private int maxModNameLength = 25;
 
         private GUIStyle BaseStyle = new GUIStyle();
 
@@ -77,7 +80,7 @@ namespace KC_DevMode
             consoleYpos   = Screen.height * 0f;
             consoleXpos   = Screen.width  * 1/4f;
 
-            const float modNamePerc = 0.1f;
+            const float modNamePerc = 0.15f;
             logModNameWidth = consoleWidth * modNamePerc;
             logMessageWidth = consoleWidth * (1f-modNamePerc);
         }
@@ -95,7 +98,7 @@ namespace KC_DevMode
                 LogModNameBackgroundTex.Add(color, Texture2DFromColor(color, logModNameWidth, textHeight));
             }
         }
-        
+
         public void Generate_LogMessageBackgroundTex()
         {
             LogMessageBackgroundTex = new Dictionary<Color, Texture2D>();
@@ -165,7 +168,7 @@ namespace KC_DevMode
 
                 GUIStyle messageStyle = BaseStyle;
                 messageStyle.normal.background = LogMessageBackgroundTex[Color.grey];
-                
+
                 GUI.Label(new Rect(0f, textHeight * x, logModNameWidth, textHeight), modName, BaseStyle);
                 GUI.Label(new Rect(logModNameWidth, textHeight * x, logMessageWidth, textHeight), message, BaseStyle);
             }
@@ -175,7 +178,26 @@ namespace KC_DevMode
  
         public void AddEvent(string modName, string msg)
         {
-            eventLog.Add(new []{modName, msg});
+            if (modName.Length > maxModNameLength) modName = modName.Substring(0, maxModNameLength);
+
+            // Split event into multiple if too long
+            if (msg.Length > maxMessageLength)
+            {
+                int numEvents = (int) Math.Ceiling((double) (msg.Length / maxMessageLength)) + 1;
+                Debug.Log($"Message length too long {msg.Length} vs {maxMessageLength}. Splitting into {numEvents}");
+
+                for (int i=0; i<numEvents; i++)
+                {
+                    int amountStringLeft = msg.Length - i * maxMessageLength;
+                    
+                    string message = msg.Substring(i * maxMessageLength, Math.Min(maxMessageLength, amountStringLeft));
+                    eventLog.Add(new []{modName, message});
+                }
+            }
+            else
+            {
+                eventLog.Add(new []{modName, msg});
+            }
         }
     }
     
