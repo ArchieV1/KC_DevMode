@@ -3,17 +3,13 @@ Adds common DevMode functionality to Kingdoms and Castles.
 Useful for testing things or just editing your world
 
 # Features
-- Log
-- Remove update popup
+- Adds in game log
+- Removes update popup
 
 
 # Planned features
 - In game log
-  - Window
-  - Can accept text
-  - Intercept from logging
-  - Print all 3 in different colours
-    - Tick box to enable from different logsprivate List<>HashTable;
+  - Tick box to enable from different mod logs rather than always catching all
 - Gamemode switcher
 - Auto load map on startup
 - Load test map button
